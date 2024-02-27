@@ -5,8 +5,10 @@ export default defineConfig({
   fullyParallel: false,
   retries: 0,
   workers: 1, // process.env.CI ? 1 : undefined,
-  reporter: [['html',
-  ]],
+  reporter: [
+    // ['html'],
+    ['blob', { outputDir: 'blobs', fileName: `report-manual.zip` }]
+  ],
   use: {
     baseURL: 'https://shopdemo-alex-hot.koyeb.app',
   },
