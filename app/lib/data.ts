@@ -1,3 +1,5 @@
+import fs from 'fs/promises';
+import path from 'path';
 import { sql } from '@vercel/postgres';
 import {
   CustomerField,
@@ -7,8 +9,12 @@ import {
   LatestInvoiceRaw,
   User,
   Revenue,
+  Result,
+  Report
 } from './definitions';
 import { formatCurrency } from './utils';
+
+const ITEMS_PER_PAGE = 15;
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -52,6 +58,55 @@ export async function fetchLatestInvoices() {
   }
 }
 
+export async function readResults(query?: string) {
+  const resultsDirPath = path.join(process.cwd(), 'data/results');
+  const files = await fs.readdir(resultsDirPath);
+  const jsonFiles = files.filter((file) => path.extname(file) === '.json');
+  if (query !== undefined) {
+    const filteredFiles = jsonFiles.filter((file) =>
+      file.toLowerCase().includes(query.toLowerCase()),
+    );
+    jsonFiles.length = 0;
+    jsonFiles.push(...filteredFiles);
+  }
+
+  const fileContents: Result[] = await Promise.all(
+    jsonFiles.map(async (file) => {
+      const filePath = path.join(resultsDirPath, file);
+      const content = await fs.readFile(filePath, 'utf-8');
+      return JSON.parse(content);
+    }),
+  );
+  return fileContents;
+}
+
+export async function readReports(query?: string) {
+  const resultsDirPath = path.join(process.cwd(), 'data/reports');
+  const dirents = await fs.readdir(resultsDirPath, { withFileTypes: true });
+
+  const reports: Report[] = await Promise.all(
+    dirents
+      .filter((dirent) => dirent.isDirectory())
+      .map(async (dirent) => {
+        const dirPath = path.join(resultsDirPath, dirent.name);
+        const stats = await fs.stat(dirPath);
+        return {
+          reportID: dirent.name,
+          createdAt: stats.birthtime,
+        };
+      }),
+  );
+  if (query !== undefined) {
+    const filteredReports = reports.filter((report) =>
+      report.reportID.toLowerCase().includes(query.toLowerCase()),
+    );
+    reports.length = 0;
+    reports.push(...filteredReports);
+  }
+
+  return reports;
+}
+
 export async function fetchCardData() {
   try {
     // You can probably combine these into a single SQL query
@@ -87,7 +142,7 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
