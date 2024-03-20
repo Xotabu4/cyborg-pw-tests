@@ -13,7 +13,7 @@ export async function GET() {
       const dirPath = path.join(resultsDirPath, dirent.name);
       const stats = await fs.stat(dirPath);
       return {
-        id: dirent.name,
+        reportId: dirent.name,
         createdAt: stats.birthtime,
       };
     }));
