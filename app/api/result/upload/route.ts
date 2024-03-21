@@ -1,6 +1,4 @@
-import path from 'path';
-import { mkdir, writeFile } from 'fs/promises';
-import { randomUUID } from 'crypto';
+import { saveResult } from '@/app/lib/data';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 export async function PUT(request: Request) {
@@ -13,36 +11,15 @@ export async function PUT(request: Request) {
     return Response.json({ error: 'No files received.' }, { status: 400 });
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const resultID = randomUUID();
-
   try {
-    const resultFolderPath = path.join(
-      process.cwd(),
-      `app/data/results`,
-    );
-    await mkdir(resultFolderPath, {
-      recursive: true,
-    });
-    await writeFile(`${resultFolderPath}/${resultID}.zip`, buffer);
-
-    const metaData = {
-      resultID,
-      createdAt: new Date().toISOString(),
-    };
-    await writeFile(
-      `${resultFolderPath}/${resultID}.json`,
-      Buffer.from(
-        JSON.stringify(metaData, null, 2),
-      ),
-    );
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const metaData = await saveResult(buffer);
     return Response.json({
       message: 'Success',
       data: metaData,
       status: 201,
     });
   } catch (error) {
-    console.log('Error occured ', error);
     return Response.json({
       message: 'Failed',
       data: {

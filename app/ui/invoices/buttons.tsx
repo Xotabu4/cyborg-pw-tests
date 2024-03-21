@@ -1,3 +1,4 @@
+"use client"
 import {
   EyeIcon,
   PencilIcon,
@@ -5,6 +6,10 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { Button } from '../button';
+import { useRouter } from 'next/navigation';
+
+
 
 export function CreateInvoice() {
   return (
@@ -19,13 +24,16 @@ export function CreateInvoice() {
 }
 
 export function SeeReport({ id }: { id: string }) {
+  const router = useRouter();
   return (
-    <Link
-      href={`/report/${id}`}
+    <Button
+      onClick={() => {
+        router.push(`data/reports/${id}/index.html`);
+      }}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <EyeIcon className="w-5" />
-    </Link>
+    </Button>
   );
 }
 
