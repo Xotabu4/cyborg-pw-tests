@@ -6,7 +6,7 @@ export async function DELETE(request: Request) {
   const reqData = await request.json();
   const reportId = reqData.resultId;
 
-  const resultPath = path.join(process.cwd(), 'data/results', reportId);
+  const resultPath = path.join(process.cwd(), 'app/data/results', reportId);
 
   try {
     await fs.unlink(`${resultPath}.json`);

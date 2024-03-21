@@ -14,8 +14,8 @@ export async function POST(request: Request) {
     return new Response('Invalid request: Provide { reportIds: [...] }', { status: 400 });
   }
 
-  const resultFolderPath = path.join(process.cwd(), `data/results`);
-  const tempFolderPath = path.join(process.cwd(), `data/.tmp`);
+  const resultFolderPath = path.join(process.cwd(), `app/data/results`);
+  const tempFolderPath = path.join(process.cwd(), `app/data/.tmp`);
   try {
     await fs.rm(tempFolderPath, { recursive: true, force: true });
   } catch (error) {

@@ -3,7 +3,7 @@ import Search from '@/app/ui/search';
 import { lusitana } from '@/app/ui/fonts';
 import { Suspense } from 'react';
 import Table from '../ui/results/ResultsTable';
-import { ResultsTableSkeleton } from '../ui/skeletons';
+import { TableSkeleton } from '../ui/skeletons';
 
 export default async function Page({
   searchParams,
@@ -25,7 +25,7 @@ export default async function Page({
         <Search placeholder="Search invoices..." />
         {/* <CreateInvoice /> */}
       </div>
-      <Suspense key={query + currentPage} fallback={<ResultsTableSkeleton />}>
+      <Suspense key={query + currentPage} fallback={<TableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { formatDateToLocal, formatCurrency, formatTimeToLocal } from '@/app/lib/utils';
 import { readReports, readResults } from '@/app/lib/data';
+import { SeeReport } from '../invoices/buttons';
 
 export default async function ReportsTable({
   query,
@@ -107,8 +108,8 @@ export default async function ReportsTable({
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      {/* <UpdateInvoice id={result.id} />
-                      <DeleteInvoice id={result.id} /> */}
+                      {<SeeReport id={result.reportID} />
+                      /* <DeleteInvoice id={result.id} /> */}
                     </div>
                   </td>
                 </tr>

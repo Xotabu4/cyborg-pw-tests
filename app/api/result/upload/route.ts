@@ -19,7 +19,7 @@ export async function PUT(request: Request) {
   try {
     const resultFolderPath = path.join(
       process.cwd(),
-      `data/results`,
+      `app/data/results`,
     );
     await mkdir(resultFolderPath, {
       recursive: true,

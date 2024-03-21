@@ -59,7 +59,7 @@ export async function fetchLatestInvoices() {
 }
 
 export async function readResults(query?: string) {
-  const resultsDirPath = path.join(process.cwd(), 'data/results');
+  const resultsDirPath = path.join(process.cwd(), 'app/data/results');
   const files = await fs.readdir(resultsDirPath);
   const jsonFiles = files.filter((file) => path.extname(file) === '.json');
   if (query !== undefined) {
@@ -81,7 +81,7 @@ export async function readResults(query?: string) {
 }
 
 export async function readReports(query?: string) {
-  const resultsDirPath = path.join(process.cwd(), 'data/reports');
+  const resultsDirPath = path.join(process.cwd(), 'app/data/reports');
   const dirents = await fs.readdir(resultsDirPath, { withFileTypes: true });
 
   const reports: Report[] = await Promise.all(
