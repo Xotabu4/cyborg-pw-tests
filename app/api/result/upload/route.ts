@@ -2,16 +2,15 @@ import { saveResult } from '@/app/lib/data';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 export async function PUT(request: Request) {
-  const formData = await request.formData();
-
-  const file = formData.get('file') as File;
-  // TODO: here is place to define additional fields
-  const name = formData.get('name');
-  if (!file) {
-    return Response.json({ error: 'No files received.' }, { status: 400 });
-  }
-
   try {
+    const formData = await request.formData();
+
+    const file = formData.get('file') as File;
+    // TODO: here is place to define additional fields
+    const name = formData.get('name');
+    if (!file) {
+      return Response.json({ error: 'No files received.' }, { status: 400 });
+    }
     const buffer = Buffer.from(await file.arrayBuffer());
     const metaData = await saveResult(buffer);
     return Response.json({

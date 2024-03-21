@@ -32,13 +32,13 @@ export async function readResults(query?: string) {
 }
 
 export async function readReports(query?: string) {
-  const dirents = await fs.readdir(RESULTS_FOLDER, { withFileTypes: true });
+  const dirents = await fs.readdir(REPORTS_FOLDER, { withFileTypes: true });
 
   const reports: Report[] = await Promise.all(
     dirents
       .filter((dirent) => dirent.isDirectory())
       .map(async (dirent) => {
-        const dirPath = path.join(RESULTS_FOLDER, dirent.name);
+        const dirPath = path.join(REPORTS_FOLDER, dirent.name);
         const stats = await fs.stat(dirPath);
         return {
           reportID: dirent.name,
@@ -114,7 +114,7 @@ export async function generateReport(resultsIds: string[]) {
 
   const reportId = randomUUID();
   // TODO: Make this async
-  execSync('npx playwright merge-reports --reporter html ./data/.tmp', {
+  execSync(`npx playwright merge-reports --reporter html ${TMP_FOLDER}`, {
     env: {
       ...process.env,
       PLAYWRIGHT_HTML_REPORT: path.join(REPORTS_FOLDER, reportId),
