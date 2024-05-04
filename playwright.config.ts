@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
 import { Owner, Tag } from "./config/testAtributes";
 
@@ -8,7 +9,8 @@ export default defineConfig({
   retries: 0,
   workers: 1, // process.env.CI ? 1 : undefined,
   reporter: [
-    // ['html'],
+    ["list"],
+    ["html"],
     ["blob", { outputDir: "blobs", fileName: `report-manual.zip` }],
   ],
   use: {
@@ -17,10 +19,7 @@ export default defineConfig({
   projects: [
     {
       name: `manual-${Owner.okhotemskyi}`,
-      grep: [
-        // new RegExp(Tag.MANUAL), 
-        new RegExp(Owner.okhotemskyi)
-      ],
+      grep: [new RegExp(Tag.MANUAL), new RegExp(Owner.okhotemskyi)],
       use: {
         headless: false,
         ...devices["Desktop Chrome"],

@@ -1,73 +1,64 @@
-import { manualTest as pip } from "../fixture/PIPmanualFixture";
-import { manualTest } from "../fixture/manualFixture";
-import { Owner, Tag, description } from "../config/testAtributes";
+import { test } from "../fixture/v2/test";
+import { Owner, Tag, description, severity } from "../config/testAtributes";
+import { expect } from "@playwright/test";
+import { ai } from "@zerostep/playwright";
 
-declare const ai: any;
-
-pip(
-  "pip",
+test(
+  "Login should be successful",
   {
     tag: [Tag.MANUAL, Owner.okhotemskyi],
     annotation: [
       description(`
-      Objective of this test is very important!
-      We need to check if the admin can log in.
-      Also, we need to check if the user can see the dashboard after logging in.
+      In this test we will check if the user can log in. 
+      User should be able to log in with the correct credentials. 
+      After logging in, the user should be redirected to the dashboard.
       `),
+      severity("CRITICAL"),
     ],
   },
   async ({ manualStep }) => {
-    await manualStep("1 - Go to the login page");
-    await manualStep("2 - Login as xotabu4@gmail.com / xotabu4@gmail.com");
-    await manualStep("3 - Expected to be logged in");
+    await manualStep("Go to the login page");
+    await manualStep("Login as xotabu4@gmail.com / xotabu4@gmail.com");
+    await manualStep("Expected to be logged in");
   }
 );
 
-manualTest(
-  "user can login as admin",
+test(
+  "Can register new user",
   {
-    tag: [Tag.MANUAL, Owner.okhotemskyi],
+    tag: [Tag.CYBORG, Owner.okhotemskyi],
     annotation: [
       description(`
-      Objective of this test is very important!
-      We need to check if the admin can log in.
-      Also, we need to check if the user can see the dashboard after logging in.
+      Verify that a new user can register, but this test has mix of manual and automated steps.
       `),
     ],
   },
-  async ({ manualStep }) => {
-    await manualStep("1 - Go to the login page");
-    await manualStep("2 - Login as xotabu4@gmail.com / xotabu4@gmail.com");
-    await manualStep("3 - Expected to be logged in");
+  async ({ page, manualStep }) => {
+    await page.goto("/register");
+
+    await manualStep("Register with valid credentials");
+    await expect(page).toHaveURL(/.*dashboard/);
+    await manualStep("Expect user registered");
   }
 );
 
-manualTest.skip(
-  "cyborg test example",
+test(
+  "Should not register with existing email",
   {
-    tag: [Tag.CYBORG, Owner.billHerrington],
+    tag: [Tag.AI, Owner.okhotemskyi],
+    annotation: [
+      description(`
+    This test has mixed manual, automated and AI steps! 🤯
+    `),
+    ],
   },
   async ({ page, manualStep }) => {
-    // Automated step
-    await page.goto("/");
-    // Manual step
-    await manualStep("1 - Expect user logged in");
-    // Manual step
-    await manualStep("2 - Expect user logged out");
-  }
-);
-
-manualTest.skip(
-  "cyborg ai test",
-  {
-    tag: [Tag.MANUAL, Owner.okhotemskyi],
-  },
-  async ({ page, manualStep }) => {
-    // Automated step
-    await page.goto("/");
-    // AI step
-    await ai("Expect user logged in");
-    // Manual step
-    await manualStep("2 - Expect user logged out");
+    await page.goto("/register");
+    await ai(
+      "Assert body contains text 'HELLO WORLD!' ",
+      { page, test },
+      { debug: true, type: "assert" }
+    );
+    await manualStep("Register with existing email - xotabu4@gmail.com");
   }
 );
