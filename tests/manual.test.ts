@@ -6,14 +6,12 @@ import { ai } from "@zerostep/playwright";
 test(
   "Login should be successful",
   {
-    tag: [Tag.MANUAL, Owner.okhotemskyi],
+    tag: [Tag.CYBORG, Owner.okhotemskyi],
     annotation: [
-      description(`
-      In this test we will check if the user can log in. 
+      severity.CRITICAL,
+      description(`In this test we will check if the user can log in. 
       User should be able to log in with the correct credentials. 
-      After logging in, the user should be redirected to the dashboard.
-      `),
-      severity("CRITICAL"),
+      After logging in, the user should be redirected to the dashboard`),
     ],
   },
   async ({ manualStep }) => {
@@ -28,28 +26,32 @@ test(
   {
     tag: [Tag.CYBORG, Owner.okhotemskyi],
     annotation: [
-      description(`
-      Verify that a new user can register, but this test has mix of manual and automated steps.
-      `),
+      severity.CRITICAL,
+      description(
+        `Verify that a new user can register, but this test has mix of manual and automated steps.`
+      ),
     ],
   },
   async ({ page, manualStep }) => {
+    // ARRANGE
     await page.goto("/register");
 
+    // ACT
     await manualStep("Register with valid credentials");
+
+    // ASSERT
     await expect(page).toHaveURL(/.*dashboard/);
     await manualStep("Expect user registered");
   }
 );
 
 test(
-  "Should not register with existing email",
+  "Should not be able to register with existing email",
   {
-    tag: [Tag.AI, Owner.okhotemskyi],
+    tag: [Tag.CYBORG, Owner.okhotemskyi],
     annotation: [
-      description(`
-    This test has mixed manual, automated and AI steps! 🤯
-    `),
+      severity.CRITICAL,
+      description(`This test has mixed manual, automated and AI steps! 🤯`),
     ],
   },
   async ({ page, manualStep }) => {

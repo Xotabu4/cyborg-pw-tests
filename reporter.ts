@@ -17,9 +17,13 @@ class PwReportsServerReporter implements Reporter {
   }
 
   async onEnd(result: FullResult) {
-    const blobReporterConfig = this.config.reporter.find((r) => r[0] === "blob");
-    if (blobReporterConfig === undefined) { 
-      console.error("Blob reporter config not found, blob reporter is required for this reporter to work. Results will not be uploaded.");
+    const blobReporterConfig = this.config.reporter.find(
+      (r) => r[0] === "blob"
+    );
+    if (blobReporterConfig === undefined) {
+      console.error(
+        "Blob reporter config not found, blob reporter is required for this reporter to work. Results will not be uploaded."
+      );
       return;
     }
     const testResults = blobReporterConfig[1];
@@ -37,7 +41,8 @@ class PwReportsServerReporter implements Reporter {
           mimeType: "application/zip",
           buffer: buffer,
         },
-        name: "10-mar-pw-workshop",
+        testRunName: "regression-run-v1.10",
+        reporter: "okhotemskyi",
       },
     });
 
@@ -52,10 +57,10 @@ class PwReportsServerReporter implements Reporter {
         },
       })
     ).json();
-    
+
     console.log(
-        `🎭 HTML Report is available at: http://localhost:3000/${report.reportUrl}`
-    )
+      `🎭 HTML Report is available at: http://localhost:3000/${report.reportUrl}`
+    );
   }
 }
 

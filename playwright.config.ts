@@ -10,43 +10,36 @@ export default defineConfig({
   workers: 1, // process.env.CI ? 1 : undefined,
   reporter: [
     ["list"],
-    ["html"],
+    ["html", { open: "always" }],
     ["blob", { outputDir: "blobs", fileName: `report-manual.zip` }],
+    ["./reporter.ts"],
   ],
   use: {
     baseURL: "https://shopdemo-alex-hot.koyeb.app",
   },
   projects: [
     {
-      name: `manual-${Owner.okhotemskyi}`,
-      grep: [new RegExp(Tag.MANUAL), new RegExp(Owner.okhotemskyi)],
+      name: `cyborg-${Owner.okhotemskyi}`,
+
+      grep: new RegExp(Owner.okhotemskyi),
+      grepInvert: new RegExp(Tag.AUTOMATED),
       use: {
-        headless: false,
         ...devices["Desktop Chrome"],
+        headless: false,
         trace: "on",
         video: "on",
       },
     },
-    // {
-    //   name: `manual-${Owner.billHerrington}`,
-    //   grep: [new RegExp(Tag.MANUAL), new RegExp(Owner.billHerrington)],
-    //   use: {
-    //     headless: false,
-    //     ...devices["Desktop Chrome"],
-    //     trace: "on",
-    //     video: "on",
-    //   },
-    // },
-    // {
-    //   name: "automated",
-    //   grepInvert: [new RegExp("@MANUAL")],
-    //   use: {
-    //     ...devices["Desktop Chrome"],
-    //     screenshot: {
-    //       mode: "only-on-failure",
-    //       fullPage: true,
-    //     },
-    //   },
-    // },
+    {
+      name: "automated",
+      grepInvert: [new RegExp(Tag.CYBORG)],
+      use: {
+        ...devices["Desktop Chrome"],
+        screenshot: {
+          mode: "only-on-failure",
+          fullPage: true,
+        },
+      },
+    },
   ],
 });

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { Tag } from "../config/testAtributes";
 
-test.skip(
+test(
   "has title",
   {
     tag: [Tag.AUTOMATED],
@@ -14,7 +14,7 @@ test.skip(
   }
 );
 
-test.skip(
+test(
   "get started link",
   {
     tag: [Tag.AUTOMATED],
