@@ -1,5 +1,6 @@
 export const Tag = {
   CYBORG: "@CYBORG",
+  AI: "@AI",
   AUTOMATED: "@AUTOMATED",
 };
 

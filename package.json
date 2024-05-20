@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test",
-    "okhotemskyi": "playwright test --project=cyborg-@okhotemskyi"
+    "test": "playwright test --project=automated",
+    "ui": "playwright test --ui",
+    "cyborg-okhotemskyi": "playwright test --project=@okhotemskyi"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.42.1",
+    "@playwright/test": "^1.43.1",
     "@types/node": "^20.10.4",
     "dotenv": "^16.4.5"
   },

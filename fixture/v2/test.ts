@@ -2,10 +2,9 @@ import {
   Browser,
   BrowserContext,
   Page,
-  chromium,
   test as pwTest,
-  mergeTests,
 } from "@playwright/test";
+import { chromium } from "playwright";
 
 export const test = pwTest.extend<{
   testControl: {
@@ -21,7 +20,7 @@ export const test = pwTest.extend<{
     });
 
     const tcPage = await tcBrowser.newPage({
-      viewport: { width: 500, height: 700 },
+      viewport: { width: 300, height: 700 },
     });
 
     await tcPage.goto(
@@ -42,7 +41,6 @@ export const test = pwTest.extend<{
       await test.step(
         stepName,
         async () => {
-          // TODO: Find way keep correct trace that has step name
           await testControl.page.evaluate((_stepName) => {
             const newStep = window.document.createElement("li");
             newStep.textContent = _stepName;
@@ -63,6 +61,10 @@ export const test = pwTest.extend<{
       );
     await use(manualStep);
     // In case test interupted
-    await testControl.page.evaluate("playwright.resume()");
+    try {
+      await testControl.page.evaluate("playwright.resume()");
+    } catch (err) {
+      // no-op
+    }
   },
 });

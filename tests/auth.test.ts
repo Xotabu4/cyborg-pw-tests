@@ -1,7 +1,6 @@
 import { test } from "../fixture/v2/test";
 import { Owner, Tag, description, severity } from "../config/testAtributes";
 import { expect } from "@playwright/test";
-import { ai } from "@zerostep/playwright";
 
 test(
   "Login should be successful",
@@ -28,18 +27,14 @@ test(
     annotation: [
       severity.CRITICAL,
       description(
-        `Verify that a new user can register, but this test has mix of manual and automated steps.`
+        `Verify that a new user can register, 
+        but this test has mix of manual and automated steps.`
       ),
     ],
   },
   async ({ page, manualStep }) => {
-    // ARRANGE
     await page.goto("/register");
-
-    // ACT
     await manualStep("Register with valid credentials");
-
-    // ASSERT
     await expect(page).toHaveURL(/.*dashboard/);
     await manualStep("Expect user registered");
   }
@@ -56,11 +51,7 @@ test(
   },
   async ({ page, manualStep }) => {
     await page.goto("/register");
-    await ai(
-      "Assert body contains text 'HELLO WORLD!' ",
-      { page, test },
-      { debug: true, type: "assert" }
-    );
     await manualStep("Register with existing email - xotabu4@gmail.com");
+    await manualStep("Should be unable to register");
   }
 );

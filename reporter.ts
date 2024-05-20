@@ -13,7 +13,6 @@ class PwReportsServerReporter implements Reporter {
   config: FullConfig;
   onBegin(config: FullConfig, suite: Suite) {
     this.config = config;
-    console.log(`Starting the run with ${suite.allTests().length} tests`);
   }
 
   async onEnd(result: FullResult) {
@@ -41,26 +40,26 @@ class PwReportsServerReporter implements Reporter {
           mimeType: "application/zip",
           buffer: buffer,
         },
-        testRunName: "regression-run-v1.10",
+        testRunName: "regression-run-v1.11",
         reporter: "okhotemskyi",
       },
     });
 
     const { data } = await resp.json();
 
-    console.log(data);
+    console.log("[PW_reports_server] result uploaded: ", data);
 
-    const report = await (
-      await ctx.post("http://localhost:3000/api/report/generate", {
-        data: {
-          resultsIds: [data.resultID],
-        },
-      })
-    ).json();
+    // const report = await (
+    //   await ctx.post("http://localhost:3000/api/report/generate", {
+    //     data: {
+    //       resultsIds: [data.resultID],
+    //     },
+    //   })
+    // ).json();
 
-    console.log(
-      `🎭 HTML Report is available at: http://localhost:3000/${report.reportUrl}`
-    );
+    // console.log(
+    //   `[PW_reports_server] 🎭 HTML Report is available at: http://localhost:3000${report.reportUrl}`
+    // );
   }
 }
 

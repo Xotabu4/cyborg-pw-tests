@@ -10,7 +10,7 @@ export default defineConfig({
   workers: 1, // process.env.CI ? 1 : undefined,
   reporter: [
     ["list"],
-    ["html", { open: "always" }],
+    ["html", { open: "never" }],
     ["blob", { outputDir: "blobs", fileName: `report-manual.zip` }],
     ["./reporter.ts"],
   ],
@@ -19,8 +19,7 @@ export default defineConfig({
   },
   projects: [
     {
-      name: `cyborg-${Owner.okhotemskyi}`,
-
+      name: Owner.okhotemskyi,
       grep: new RegExp(Owner.okhotemskyi),
       grepInvert: new RegExp(Tag.AUTOMATED),
       use: {
