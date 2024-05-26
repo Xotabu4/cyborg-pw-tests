@@ -5,6 +5,7 @@ import {
   test as pwTest,
 } from "@playwright/test";
 import { chromium } from "playwright";
+import { ROOT_PATH } from "../../config";
 
 export const test = pwTest.extend<{
   testControl: {
@@ -24,7 +25,7 @@ export const test = pwTest.extend<{
     });
 
     await tcPage.goto(
-      "file:///Users/xotabu4/Documents/GitHub/cyborg-pw-tests/index.html"
+      `file://${ROOT_PATH}/index.html`
     );
     await page.bringToFront();
     await use({
