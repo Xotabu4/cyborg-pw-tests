@@ -13,7 +13,8 @@ test(
       After logging in, the user should be redirected to the dashboard`),
     ],
   },
-  async ({ manualStep }) => {
+  async ({ manualStep, page }) => {
+    await page.goto("/");
     await manualStep("Go to the login page");
     await manualStep("Login as xotabu4@gmail.com / xotabu4@gmail.com");
     await manualStep("Expected to be logged in");
