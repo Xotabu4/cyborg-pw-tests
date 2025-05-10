@@ -11,8 +11,7 @@ export default defineConfig({
   reporter: [
     ["list"],
     ["html", { open: "never" }],
-    ["blob", { outputDir: "blobs", fileName: `report-manual.zip` }],
-    ["./reporter.ts"],
+    // ["blob", { outputDir: "blobs", fileName: `report-manual.zip` }],
   ],
   use: {
     baseURL: "https://shopdemo-alex-hot.koyeb.app",

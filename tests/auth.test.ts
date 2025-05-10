@@ -1,4 +1,4 @@
-import { test } from "../fixture/v2/test";
+import { test } from "../fixture/test";
 import { Owner, Tag, description, severity } from "../config/testAtributes";
 import { expect } from "@playwright/test";
 

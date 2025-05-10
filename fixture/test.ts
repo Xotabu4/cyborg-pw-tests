@@ -6,6 +6,13 @@ import {
 } from "@playwright/test";
 import { chromium } from "playwright";
 
+class TestFailedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "TestFailedError";
+  }
+}
+
 export const test = pwTest.extend<{
   testControl: {
     page: Page;
@@ -41,6 +48,13 @@ export const test = pwTest.extend<{
       await test.step(
         stepName,
         async () => {
+          // Write current test name
+          await testControl.page.evaluate((_testName) => {
+            const newStep = window.document.querySelector("#testName");
+            newStep.textContent = _testName;
+          }, test.info().title);
+
+          // Write current step name
           await testControl.page.evaluate((_stepName) => {
             const newStep = window.document.createElement("li");
             newStep.textContent = _stepName;
@@ -48,13 +62,17 @@ export const test = pwTest.extend<{
               .querySelector("#stepsList")
               ?.appendChild(newStep);
           }, stepName);
+
+          // Pause for manual step
           await testControl.page.pause();
+
           const lastStep = await testControl.page
             .locator("#stepsList li:last-of-type")
             .textContent();
 
+          // If last step failed, throw error
           if (lastStep!.includes("❌")) {
-            throw new Error(lastStep as string);
+            throw new TestFailedError(lastStep as string);
           }
         },
         { box: true }

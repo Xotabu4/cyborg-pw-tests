@@ -6,3 +6,4 @@ node_modules/
 /blobs
 
 .env
+.DS_Store
