@@ -13,7 +13,7 @@ class TestFailedError extends Error {
   }
 }
 
-export const test = pwTest.extend<{
+const test = pwTest.extend<{
   testControl: {
     page: Page;
     browser: Browser;
@@ -27,13 +27,12 @@ export const test = pwTest.extend<{
     });
 
     const tcPage = await tcBrowser.newPage({
-      viewport: { width: 300, height: 700 },
+      viewport: { width: 500, height: 700 },
     });
 
-    await tcPage.goto(
-      "file:///Users/xotabu4/Documents/GitHub/cyborg-pw-tests/index.html"
-    );
-    await page.bringToFront();
+    await tcPage.goto("file://" + process.cwd() + "/node_modules/@cyborgtests/test/app-build/index.html");
+    await tcPage.bringToFront();
+
     await use({
       browser: tcBrowser,
       context: tcPage.context(),
@@ -44,26 +43,21 @@ export const test = pwTest.extend<{
     await tcBrowser.close();
   },
   manualStep: async ({ testControl, page, browser, context }, use) => {
-    const manualStep = async (stepName) =>
+    const manualStep = async (stepName: string) =>
       await test.step(
         stepName,
         async () => {
-          // Write current test name
           await testControl.page.evaluate((_testName) => {
-            const newStep = window.document.querySelector("#testName");
-            newStep.textContent = _testName;
+            (window as any)?.testUtils?.setTestName(_testName);
           }, test.info().title);
 
           // Write current step name
           await testControl.page.evaluate((_stepName) => {
-            const newStep = window.document.createElement("li");
-            newStep.textContent = _stepName;
-            window.document.body
-              .querySelector("#stepsList")
-              ?.appendChild(newStep);
+            (window as any)?.testUtils?.addStep(_stepName);
           }, stepName);
 
           // Pause for manual step
+
           await testControl.page.pause();
 
           const lastStep = await testControl.page
@@ -86,3 +80,5 @@ export const test = pwTest.extend<{
     }
   },
 });
+
+export default test;

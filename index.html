@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Test Control</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyborg Test UI</title>
     <style>
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -93,38 +94,8 @@
       }
     </style>
   </head>
-
   <body>
-    <div id="container">
-      <h4>Test:</h4>
-      <h3 id="testName">Loading...</h3>
-      
-      <div class="divider"></div>
-      
-      <h4>Steps:</h4>
-      <ol id="stepsList"></ol>
-      
-      <div class="divider"></div>
-      
-      <button class="btn-success"
-        onclick="const r = document.querySelector('#stepsList li:last-of-type'); 
-        r.textContent = `✅ ${r.textContent}` ;
-        r.className = 'step-pass';
-        playwright.resume();">
-        ✅ Step passed
-      </button>
-      
-      <input placeholder="Failure reason" id="failureReasonInput" />
-      
-      <button class="btn-danger"
-        onclick="
-          const reason = document.querySelector('#failureReasonInput').value;
-          const r = document.querySelector('#stepsList li:last-of-type'); 
-          r.textContent = `❌ ${r.textContent} - ${reason}` ;
-          r.className = 'step-fail';
-          playwright.resume();">
-        ❌ Step Failed
-      </button>
-    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/ui/index.tsx"></script>
   </body>
 </html>

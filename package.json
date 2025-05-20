@@ -1,22 +1,50 @@
 {
-  "name": "cyborg-pw-tests",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "playwright test --project=automated",
-    "ui": "playwright test --ui",
-    "cyborg-okhotemskyi": "playwright test --project=@okhotemskyi"
+  "name": "@cyborgtests/test",
+  "version": "0.0.1",
+  "description": "A test framework with manual step support",
+  "main": "dist/index.es.js",
+  "repository": {
+    "url": "https://github.com/CyborgTests/cyborg-test"
   },
-  "keywords": [],
+  "scripts": {
+    "build:lib": "vite build",
+    "build:app": "vite build --config vite.config.app.ts",
+    "prepare": "npm run build:app && npm run build:lib",
+    "dev": "vite --config vite.config.app.ts",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "testing",
+    "cyborg tests",
+    "manual step",
+    "playwright"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "peerDependencies": {
+    "@playwright/test": "^1.52.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.0.0",
-    "dotenv": "^16.4.5"
+    "@types/node": "^22.15.18",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.4",
+    "@vitejs/plugin-react": "^4.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.4.11",
+    "vite-plugin-singlefile": "^2.2.0"
   },
-  "dependencies": {
-    "@zerostep/playwright": "^0.1.5"
-  }
+  "files": [
+    "dist",
+    "app-build",
+    "README.md",
+    "LICENSE",
+    "package.json",
+    "package-lock.json",
+    "src"
+  ]
 }
