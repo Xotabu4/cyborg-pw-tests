@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import StepsList from './StepsList';
 import { useTestStore } from '../store/TestStore';
 
@@ -21,44 +21,54 @@ export default function Content() {
   }, [dispatch]);
 
   return (
-    <div id="container">
-      <h4>Test:</h4>
-      <h3 id="testName">{state.testName}</h3>
-      
-      <div className="divider"></div>
-      
-      <h4>Steps:</h4>
-      <StepsList />
-      
-      <div className="divider"></div>
-      
-      <button
-        className="btn-success"
-        onClick={() => {
-          dispatch({ type: 'PASS_STEP' });
-          (window as any).playwright?.resume();
-        }}
-      >
-        ✅ Step passed
-      </button>
-      
-      <input 
-        placeholder="Failure reason" 
-        id="failureReasonInput" 
-        value={failureReason} 
-        onChange={(e) => setFailureReason(e.target.value)} 
-      />
-      
-      <button
-        className="btn-danger"
-        onClick={() => {
-          dispatch({ type: 'FAIL_STEP', payload: failureReason });
-          (window as any).playwright?.resume();
-          setFailureReason('');
-        }}
-      >
-        ❌ Step Failed
-      </button>
-    </div>
+    <Fragment>
+      <header className='header'>
+        <img src="/logo.svg" alt="Cyborg Logo" />
+      </header>
+      <div id="container">
+        <h4>Test:</h4>
+        <h3 id="testName">{state.testName}</h3>
+        
+        <div className="divider"></div>
+        
+        <h4>Steps:</h4>
+        <StepsList />
+        
+        <div className="divider"></div>
+        
+        <button
+          className="btn-success"
+          onClick={() => {
+            dispatch({ type: 'PASS_STEP' });
+            (window as any).playwright?.resume();
+          }}
+        >
+          ✅ Step passed
+        </button>
+        
+        <input 
+          placeholder="Failure reason" 
+          id="failureReasonInput" 
+          value={failureReason} 
+          onChange={(e) => setFailureReason(e.target.value)} 
+        />
+        
+        <button
+          className="btn-danger"
+          onClick={() => {
+            dispatch({ type: 'FAIL_STEP', payload: failureReason });
+            (window as any).playwright?.resume();
+            setFailureReason('');
+          }}
+        >
+          ❌ Step Failed
+        </button>
+        
+      </div>
+      <footer className="footer">
+        <a href="https://github.com/CyborgTests/cyborg-test" target="_blank" rel="noopener noreferrer nofollow">Github</a>
+        <a href="https://cyborgtests.com" target="_blank" rel="noopener noreferrer nofollow">Discord</a>
+      </footer>
+    </Fragment>
   );
 } 

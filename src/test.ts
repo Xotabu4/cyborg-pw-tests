@@ -27,7 +27,7 @@ const test = pwTest.extend<{
     });
 
     const tcPage = await tcBrowser.newPage({
-      viewport: { width: 500, height: 700 },
+      viewport: { width: 500, height: 750 },
     });
 
     await tcPage.goto("file://" + process.cwd() + "/node_modules/@cyborgtests/test/app-build/index.html");
