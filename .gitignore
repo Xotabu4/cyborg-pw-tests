@@ -4,6 +4,8 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /blobs
+/app-build
+/dist
 
 .env
 .DS_Store
