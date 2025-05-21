@@ -1,7 +1,7 @@
 {
   "name": "@cyborgtests/test",
-  "version": "0.0.2",
-  "description": "A test framework with manual step support",
+  "version": "0.0.3",
+  "description": "Powerfull extension for Playwright, that allows you to include manual verification steps in your automated test flow",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "exports": {
@@ -29,9 +29,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "@playwright/test": "^1.52.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "@playwright/test": "^1.52.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
