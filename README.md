@@ -29,3 +29,27 @@ test('example with manual step', async ({ page, manualStep }) => {
 ```
 
 When `manualStep` is called the test pauses and the Cyborg Test UI window appears. Use the `✅ Step passed` or `❌ Step failed` buttons to resume the test. Failing a step throws an error so your CI can detect it.
+
+## Analytics Configuration
+
+The package includes Google Analytics integration that is enabled by default. To turn it off, use the following configuration:
+
+```typescript
+import { config } from '@cyborgtests/test';
+
+config.setConfig({
+  analyticsEnabled: false
+});
+```
+
+## UI Server Configuration
+
+The UI server runs on port 3009 by default. To use a different port:
+
+```typescript
+import { config } from '@cyborgtests/test';
+
+config.setConfig({
+  uiPort: 3000 // Change UI server port
+});
+```

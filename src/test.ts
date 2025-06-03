@@ -5,6 +5,12 @@ import {
   test as pwTest,
 } from "@playwright/test";
 import { chromium } from "playwright";
+import { config } from "./config";
+import { startServer } from "./utils/server";
+import path from 'path';
+
+const modulePath = require.resolve('@cyborgtests/test');
+const moduleDir = path.dirname(modulePath);
 
 class TestFailedError extends Error {
   constructor(message: string) {
@@ -26,11 +32,14 @@ const test = pwTest.extend<{
       headless: false,
     });
 
+    const appBuildPath = path.resolve(`${moduleDir}/app-build`);
+    const server = await startServer(config.uiPort, appBuildPath);
+
     const tcPage = await tcBrowser.newPage({
       viewport: { width: 500, height: 750 },
     });
 
-    await tcPage.goto("file://" + process.cwd() + "/node_modules/@cyborgtests/test/app-build/index.html");
+    await tcPage.goto(`http://localhost:${config.uiPort}`);
     await tcPage.bringToFront();
 
     await use({
@@ -38,9 +47,12 @@ const test = pwTest.extend<{
       context: tcPage.context(),
       page: tcPage,
     });
+
+    // Cleanup
     await tcPage.close();
     await tcPage.context().close();
     await tcBrowser.close();
+    server.kill();
   },
   manualStep: async ({ testControl, page, browser, context }, use) => {
     const manualStep = async (stepName: string) =>

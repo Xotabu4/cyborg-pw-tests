@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import StepsList from './StepsList';
 import { useTestStore } from '../store/TestStore';
+import { trackEvent } from '../../utils/analytics';
 
 export default function Content() {
   const { state, dispatch } = useTestStore();
@@ -19,6 +20,10 @@ export default function Content() {
     // Cleanup
     return () => { delete (window as any).testUtils; };
   }, [dispatch]);
+
+  const handleLinkClick = (platform: string) => {
+    trackEvent(`app_${platform}_click`);
+  };
 
   return (
     <Fragment>
@@ -66,8 +71,22 @@ export default function Content() {
         
       </div>
       <footer className="footer">
-        <a href="https://github.com/CyborgTests/cyborg-test" target="_blank" rel="noopener noreferrer nofollow">Github</a>
-        <a href="https://cyborgtests.com" target="_blank" rel="noopener noreferrer nofollow">Discord</a>
+        <a 
+          href="https://github.com/CyborgTests/cyborg-test" 
+          target="_blank" 
+          rel="noopener noreferrer nofollow"
+          onClick={() => handleLinkClick('github')}
+        >
+          Github
+        </a>
+        <a 
+          href="https://cyborgtests.com" 
+          target="_blank" 
+          rel="noopener noreferrer nofollow"
+          onClick={() => handleLinkClick('discord')}
+        >
+          Discord
+        </a>
       </footer>
     </Fragment>
   );

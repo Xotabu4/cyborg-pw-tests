@@ -1,15 +1,21 @@
 import { defineConfig } from 'vite';
-import path from 'path';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig({
+  plugins: [react()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: '@cyborgtests/test',
       fileName: (format) => `index.${format}.js`
     },
     rollupOptions: {
-      external: ['@playwright/test', 'playwright'],
+      external: ['@playwright/test', 'playwright', 'child_process', 'http', 'path', 'process'],
       output: {
         globals: {
           '@playwright/test': 'playwrightTest',
@@ -23,7 +29,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': resolve(__dirname, './src')
     }
   },
 });
