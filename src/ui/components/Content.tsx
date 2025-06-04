@@ -21,14 +21,14 @@ export default function Content() {
     return () => { delete (window as any).testUtils; };
   }, [dispatch]);
 
-  const handleLinkClick = (platform: string) => {
-    trackEvent(`app_${platform}_click`);
+  const trackButtonClick = (buttonName: string) => {
+    trackEvent(`app_${buttonName}_click`);
   };
 
   return (
     <Fragment>
       <header className='header'>
-        <img src="/logo.svg" alt="Cyborg Logo" />
+        <img src="./logo.svg" alt="Cyborg Logo" />
       </header>
       <div id="container">
         <h4>Test:</h4>
@@ -46,6 +46,7 @@ export default function Content() {
           onClick={() => {
             dispatch({ type: 'PASS_STEP' });
             (window as any).playwright?.resume();
+            trackButtonClick('pass_step');
           }}
         >
           ✅ Step passed
@@ -64,6 +65,7 @@ export default function Content() {
             dispatch({ type: 'FAIL_STEP', payload: failureReason });
             (window as any).playwright?.resume();
             setFailureReason('');
+            trackButtonClick('fail_step');
           }}
         >
           ❌ Step Failed
@@ -75,7 +77,7 @@ export default function Content() {
           href="https://github.com/CyborgTests/cyborg-test" 
           target="_blank" 
           rel="noopener noreferrer nofollow"
-          onClick={() => handleLinkClick('github')}
+          onClick={() => trackButtonClick('github')}
         >
           Github
         </a>
@@ -83,7 +85,7 @@ export default function Content() {
           href="https://cyborgtests.com" 
           target="_blank" 
           rel="noopener noreferrer nofollow"
-          onClick={() => handleLinkClick('discord')}
+          onClick={() => trackButtonClick('discord')}
         >
           Discord
         </a>

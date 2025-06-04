@@ -7,10 +7,6 @@ import {
 import { chromium } from "playwright";
 import { config } from "./config";
 import { startServer } from "./utils/server";
-import path from 'path';
-
-const modulePath = require.resolve('@cyborgtests/test');
-const moduleDir = path.dirname(modulePath);
 
 class TestFailedError extends Error {
   constructor(message: string) {
@@ -32,8 +28,7 @@ const test = pwTest.extend<{
       headless: false,
     });
 
-    const appBuildPath = path.resolve(`${moduleDir}/app-build`);
-    const server = await startServer(config.uiPort, appBuildPath);
+    const server = await startServer(config.uiPort);
 
     const tcPage = await tcBrowser.newPage({
       viewport: { width: 500, height: 750 },

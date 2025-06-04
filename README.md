@@ -32,24 +32,21 @@ When `manualStep` is called the test pauses and the Cyborg Test UI window appear
 
 ## Analytics Configuration
 
-The package includes Google Analytics integration that is enabled by default. To turn it off, use the following configuration:
+The package includes Google Analytics integration that is enabled by default. The following data is collected:
+- Unique user ID (generated on first run)
+- Test execution events (start of the test)
+- Test results (passed/failed)
+- External link clicks
+- Browser, OS information and country
+
+This data helps us understand how the tool is being used and improve it. No personal or sensitive information is collected.
+
+To turn off analytics, use the following configuration:
 
 ```typescript
 import { config } from '@cyborgtests/test';
 
 config.setConfig({
   analyticsEnabled: false
-});
-```
-
-## UI Server Configuration
-
-The UI server runs on port 3009 by default. To use a different port:
-
-```typescript
-import { config } from '@cyborgtests/test';
-
-config.setConfig({
-  uiPort: 3000 // Change UI server port
 });
 ```

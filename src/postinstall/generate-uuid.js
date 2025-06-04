@@ -1,7 +1,10 @@
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
-const idPath = path.resolve(process.cwd(), '.analytics-id');
+const modulePath = require.resolve('@cyborgtests/test');
+const moduleDir = path.dirname(modulePath);
+const rootDir = path.resolve(moduleDir, '..');
+const htmlPath = path.join(rootDir, 'app-build', 'index.html');
 
 // Generate simple UUID-like ID: timestamp + random hex
 function generateId() {
@@ -13,18 +16,20 @@ function generateId() {
 }
 
 try {
-  let id;
+  const id = generateId();
 
-  if (!fs.existsSync(idPath)) {
-    id = generateId();
-    fs.writeFileSync(idPath, id, 'utf-8');
-    console.log('🔧 Generated analytics ID:', id);
+  // Inject analytics ID into HTML
+  if (fs.existsSync(htmlPath)) {
+    let html = fs.readFileSync(htmlPath, 'utf-8');
+    const script = `<script>window.ANALYTICS_USER_ID = "${id}";</script>`;
+    
+    // Check if analytics ID is already injected
+    html = html.replace('</head>', `${script}</head>`);
+    fs.writeFileSync(htmlPath, html, 'utf-8');
+    
   } else {
-    id = fs.readFileSync(idPath, 'utf-8');
-    console.log('📦 Using existing analytics ID:', id);
+    console.log('⚠️ HTML file not found at:', htmlPath);
   }
-
-  // Optional: send to analytics endpoint
 } catch (err) {
   console.error('❌ Failed to create or read analytics ID:', err);
 }

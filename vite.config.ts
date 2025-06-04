@@ -15,7 +15,7 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`
     },
     rollupOptions: {
-      external: ['@playwright/test', 'playwright', 'child_process', 'http', 'path', 'process'],
+      external: ['@playwright/test', 'playwright', 'child_process', 'http', 'path', 'process', 'fs'],
       output: {
         globals: {
           '@playwright/test': 'playwrightTest',
