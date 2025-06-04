@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import StepsList from './StepsList';
 import { useTestStore } from '../store/TestStore';
+import { trackEvent } from '../../utils/analytics';
 
 export default function Content() {
   const { state, dispatch } = useTestStore();
@@ -20,10 +21,14 @@ export default function Content() {
     return () => { delete (window as any).testUtils; };
   }, [dispatch]);
 
+  const trackButtonClick = (buttonName: string) => {
+    trackEvent(`app_${buttonName}_click`);
+  };
+
   return (
     <Fragment>
       <header className='header'>
-        <img src="/logo.svg" alt="Cyborg Logo" />
+        <img src="./logo.svg" alt="Cyborg Logo" />
       </header>
       <div id="container">
         <h4>Test:</h4>
@@ -41,6 +46,7 @@ export default function Content() {
           onClick={() => {
             dispatch({ type: 'PASS_STEP' });
             (window as any).playwright?.resume();
+            trackButtonClick('pass_step');
           }}
         >
           ✅ Step passed
@@ -59,6 +65,7 @@ export default function Content() {
             dispatch({ type: 'FAIL_STEP', payload: failureReason });
             (window as any).playwright?.resume();
             setFailureReason('');
+            trackButtonClick('fail_step');
           }}
         >
           ❌ Step Failed
@@ -66,8 +73,22 @@ export default function Content() {
         
       </div>
       <footer className="footer">
-        <a href="https://github.com/CyborgTests/cyborg-test" target="_blank" rel="noopener noreferrer nofollow">Github</a>
-        <a href="https://cyborgtests.com" target="_blank" rel="noopener noreferrer nofollow">Discord</a>
+        <a 
+          href="https://github.com/CyborgTests/cyborg-test" 
+          target="_blank" 
+          rel="noopener noreferrer nofollow"
+          onClick={() => trackButtonClick('github')}
+        >
+          Github
+        </a>
+        <a 
+          href="https://cyborgtests.com" 
+          target="_blank" 
+          rel="noopener noreferrer nofollow"
+          onClick={() => trackButtonClick('discord')}
+        >
+          Discord
+        </a>
       </footer>
     </Fragment>
   );

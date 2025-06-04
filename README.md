@@ -29,3 +29,24 @@ test('example with manual step', async ({ page, manualStep }) => {
 ```
 
 When `manualStep` is called the test pauses and the Cyborg Test UI window appears. Use the `✅ Step passed` or `❌ Step failed` buttons to resume the test. Failing a step throws an error so your CI can detect it.
+
+## Analytics Configuration
+
+The package includes Google Analytics integration that is enabled by default. The following data is collected:
+- Unique user ID (generated on first run)
+- Test execution events (start of the test)
+- Test results (passed/failed)
+- External link clicks
+- Browser, OS information and country
+
+This data helps us understand how the tool is being used and improve it. No personal or sensitive information is collected.
+
+To turn off analytics, use the following configuration:
+
+```typescript
+import { config } from '@cyborgtests/test';
+
+config.setConfig({
+  analyticsEnabled: false
+});
+```
