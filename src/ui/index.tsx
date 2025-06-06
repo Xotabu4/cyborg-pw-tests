@@ -9,10 +9,10 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <Fragment>
+  <React.StrictMode>
     <Analytics />
     <Layout>
       <App />
     </Layout>
-  </Fragment>
+  </React.StrictMode>
 );
