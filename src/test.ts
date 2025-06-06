@@ -7,6 +7,7 @@ import {
 import { chromium } from "playwright";
 import { config } from "./config";
 import { startServer } from "./utils/server";
+import openInDefaultBrowser from "./utils/openInDefaultBrowser";
 
 class TestFailedError extends Error {
   constructor(message: string) {
@@ -35,6 +36,14 @@ const test = pwTest.extend<{
     });
 
     await tcPage.goto(`http://localhost:${config.uiPort}`);
+
+    await tcPage.exposeFunction('openInMainBrowser', (link: string) => {
+      openInDefaultBrowser(link);
+    });
+    await tcPage.evaluate(() => {
+      (window as any).testUtils.openInMainBrowser = (window as any).openInMainBrowser;
+    });
+
     await tcPage.bringToFront();
 
     await use({
@@ -67,13 +76,16 @@ const test = pwTest.extend<{
 
           await testControl.page.pause();
 
-          const lastStep = await testControl.page
-            .locator("#stepsList li:last-of-type")
-            .textContent();
-
           // If last step failed, throw error
-          if (lastStep!.includes("❌")) {
-            throw new TestFailedError(lastStep as string);
+          const hasFailed = await testControl.page.evaluate(() => {
+            if ((window as any).testUtils.hasFailed) {
+              delete (window as any).testUtils.hasFailed;
+              return true;
+            }
+            return false;
+          });
+          if (hasFailed) {
+            throw new TestFailedError(stepName as string);
           }
         },
         { box: true }
