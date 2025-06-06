@@ -8,22 +8,24 @@ export default function Footer() {
 
   return (
     <footer className="footer">
-      <a 
-        href="https://github.com/CyborgTests/cyborg-test" 
-        target="_blank" 
-        rel="noopener noreferrer nofollow"
-        onClick={() => trackButtonClick('github')}
+      <button
+        className="footer-link"
+        onClick={() => {
+          trackButtonClick('github');
+          (window as any).testUtils.openInMainBrowser('https://github.com/CyborgTests/cyborg-test');
+        }}
       >
         Github
-      </a>
-      <a 
-        href="https://cyborgtests.com" 
-        target="_blank" 
-        rel="noopener noreferrer nofollow"
-        onClick={() => trackButtonClick('discord')}
+      </button>
+      <button
+        className="footer-link"
+        onClick={() => {
+          trackButtonClick('discord');
+          (window as any).testUtils.openInMainBrowser('https://discord.com/invite/rNZCd3MHDx');
+        }}
       >
         Discord
-      </a>
+      </button>
     </footer>
   );
 } 
