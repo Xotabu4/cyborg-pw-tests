@@ -67,13 +67,16 @@ const test = pwTest.extend<{
 
           await testControl.page.pause();
 
-          const lastStep = await testControl.page
-            .locator("#stepsList li:last-of-type")
-            .textContent();
-
           // If last step failed, throw error
-          if (lastStep!.includes("❌")) {
-            throw new TestFailedError(lastStep as string);
+          const hasFailed = await testControl.page.evaluate(() => {
+            if ((window as any).testUtils.hasFailed) {
+              delete (window as any).testUtils.hasFailed;
+              return true;
+            }
+            return false;
+          });
+          if (hasFailed) {
+            throw new TestFailedError(stepName as string);
           }
         },
         { box: true }

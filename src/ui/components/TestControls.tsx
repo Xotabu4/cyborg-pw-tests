@@ -34,6 +34,7 @@ export default function TestControls() {
         className="btn-danger"
         onClick={() => {
           dispatch({ type: 'FAIL_STEP', payload: failureReason || 'No failure reason provided' });
+          (window as any).testUtils.hasFailed = true;
           (window as any).playwright?.resume();
           setFailureReason('');
           trackButtonClick('fail_step');
