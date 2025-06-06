@@ -12,7 +12,7 @@ export default function Footer() {
         className="footer-link"
         onClick={() => {
           trackButtonClick('github');
-          (window as any).testUtils.openInMainBrowser('https://github.com/CyborgTests/cyborg-test');
+          (window as any).openInMainBrowser('https://github.com/CyborgTests/cyborg-test');
         }}
       >
         Github
@@ -21,7 +21,7 @@ export default function Footer() {
         className="footer-link"
         onClick={() => {
           trackButtonClick('discord');
-          (window as any).testUtils.openInMainBrowser('https://discord.com/invite/rNZCd3MHDx');
+          (window as any).openInMainBrowser('https://discord.com/invite/rNZCd3MHDx');
         }}
       >
         Discord
