@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, ReactNode, Dispatch } from 'react';
+import React, { createContext, useContext, ReactNode, Dispatch } from 'react';
 
 // Types
 export type Step = {
@@ -64,10 +64,30 @@ const TestStoreContext = createContext<{
   dispatch: Dispatch<Action>;
 } | undefined>(undefined);
 
+// Create a single store instance
+const store = {
+  state: initialState,
+  dispatch: (action: Action) => {
+    store.state = reducer(store.state, action);
+    store.listeners.forEach(listener => listener(store.state));
+  },
+  listeners: new Set<(state: State) => void>(),
+  subscribe: (listener: (state: State) => void) => {
+    store.listeners.add(listener);
+    return () => store.listeners.delete(listener);
+  }
+};
+
 export function TestStoreProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, setState] = React.useState(store.state);
+  
+  React.useEffect(() => {
+    const unsubscribe = store.subscribe(setState);
+    return () => { unsubscribe(); };
+  }, []);
+
   return (
-    <TestStoreContext.Provider value={{ state, dispatch }}>
+    <TestStoreContext.Provider value={{ state, dispatch: store.dispatch }}>
       {children}
     </TestStoreContext.Provider>
   );
