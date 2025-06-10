@@ -12,13 +12,15 @@ body {
   justify-content: center;
   flex-wrap: wrap;
 }
-.footer a {
+.footer-link {
   color: #7f8c8d;
-  margin: 0 10px;
   text-decoration: none;
   font-size: 12px;
+  width: unset;
+  background-color: transparent;
+  font-weight: 400;
 }
-.footer a:hover {
+.footer-link:hover {
   color: #3498db;
 }
 .header {
