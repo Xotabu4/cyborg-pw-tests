@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import Footer from './Footer';
 import Header from './Header';
 import TestControlPanel from './TestControlPanel';
-import OpenDocumentPIP from './OpenDocumentPIP';
+// import OpenDocumentPIP from './OpenDocumentPIP';
 import { TestStoreProvider } from '../store/TestStore';
 
 // Add TypeScript interface for Document PiP
@@ -20,7 +20,7 @@ export default function App() {
       <Header />
       <TestControlPanel />
       <Footer />
-      <OpenDocumentPIP />
+      {/* <OpenDocumentPIP /> */}
     </TestStoreProvider>
   );
 } 
