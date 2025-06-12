@@ -13,8 +13,8 @@ export default function TestControlPanel() {
       setTestName: (name: string) => {
         dispatch({ type: 'SET_TEST_NAME', payload: name });
       },
-      addStep: (step: string) => {
-        dispatch({ type: 'ADD_STEP', payload: step });
+      addStep: (step: string, params: { isSoft?: boolean } = {}) => {
+        dispatch({ type: 'ADD_STEP', payload: { step, isSoft: params.isSoft || false } });
       },
     };
     // Cleanup

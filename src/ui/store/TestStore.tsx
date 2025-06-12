@@ -3,8 +3,9 @@ import React, { createContext, useContext, ReactNode, Dispatch } from 'react';
 // Types
 export type Step = {
   text: string;
-  status: 'pending' | 'pass' | 'fail';
+  status: 'pending' | 'pass' | 'fail' | 'warning';
   reason?: string;
+  isSoft?: boolean;
 };
 
 interface State {
@@ -20,7 +21,7 @@ const initialState: State = {
 // Actions
 export type Action =
   | { type: 'SET_TEST_NAME'; payload: string }
-  | { type: 'ADD_STEP'; payload: string }
+  | { type: 'ADD_STEP'; payload: { step: string; isSoft?: boolean } }
   | { type: 'PASS_STEP' }
   | { type: 'FAIL_STEP'; payload: string };
 
@@ -31,7 +32,7 @@ function reducer(state: State, action: Action): State {
     case 'ADD_STEP':
       return {
         ...state,
-        steps: [...state.steps, { text: action.payload, status: 'pending' }],
+        steps: [...state.steps, { text: action.payload.step, status: 'pending', isSoft: action.payload.isSoft }],
       };
     case 'PASS_STEP': {
       const steps = [...state.steps];
@@ -48,7 +49,7 @@ function reducer(state: State, action: Action): State {
       if (steps.length > 0) {
         steps[steps.length - 1] = {
           ...steps[steps.length - 1],
-          status: 'fail',
+          status: steps[steps.length - 1].isSoft ? 'warning' : 'fail',
           reason: action.payload,
         };
       }
