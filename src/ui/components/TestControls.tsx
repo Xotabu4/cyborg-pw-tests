@@ -3,6 +3,8 @@ import { useTestStore } from '../store/TestStore';
 import { trackEvent } from '../../utils/analytics';
 
 export default function TestControls() {
+  const { state } = useTestStore();
+
   const { dispatch } = useTestStore();
   const [failureReason, setFailureReason] = useState('');
 
@@ -10,11 +12,15 @@ export default function TestControls() {
     trackEvent(`app_${buttonName}_click`);
   };
 
+  const controlButtonsAreDisabled = state.steps[state.steps.length - 1]?.status !== 'pending';
+
   return (
     <Fragment>
       <button
-        className="btn-success"
+        className="btn btn-success"
+        disabled={controlButtonsAreDisabled}
         onClick={() => {
+          if (controlButtonsAreDisabled) return;
           dispatch({ type: 'PASS_STEP' });
           (window as any).playwright?.resume();
           trackButtonClick('pass_step');
@@ -31,10 +37,13 @@ export default function TestControls() {
       />
       
       <button
-        className="btn-danger"
+        className="btn btn-danger"
+        disabled={controlButtonsAreDisabled}
         onClick={() => {
+          if (controlButtonsAreDisabled) return;
           dispatch({ type: 'FAIL_STEP', payload: failureReason || 'No failure reason provided' });
           (window as any).testUtils.hasFailed = true;
+          (window as any).testUtils.failedReason = failureReason;
           (window as any).playwright?.resume();
           setFailureReason('');
           trackButtonClick('fail_step');

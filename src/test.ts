@@ -2,6 +2,7 @@ import {
   Browser,
   BrowserContext,
   Page,
+  expect,
   test as pwTest,
 } from "@playwright/test";
 import { chromium } from "playwright";
@@ -59,21 +60,23 @@ const test = pwTest.extend<{
     server.kill();
   },
   manualStep: async ({ testControl, page, browser, context }, use) => {
-    const manualStep = async (stepName: string) =>
+    const manualStep = async (stepName: string, params: { isSoft?: boolean } = {}) =>
       await test.step(
-        stepName,
+        `✋ [MANUAL] ${stepName}`,
         async () => {
           await testControl.page.evaluate((_testName) => {
             (window as any)?.testUtils?.setTestName(_testName);
           }, test.info().title);
 
           // Write current step name
-          await testControl.page.evaluate((_stepName) => {
-            (window as any)?.testUtils?.addStep(_stepName);
-          }, stepName);
+          await testControl.page.evaluate(
+            ({ stepName, params }) => {
+              (window as any).testUtils?.addStep(stepName, params);
+            },
+            { stepName, params }
+          );
 
           // Pause for manual step
-
           await testControl.page.pause();
 
           // If last step failed, throw error
@@ -85,7 +88,32 @@ const test = pwTest.extend<{
             return false;
           });
           if (hasFailed) {
-            throw new TestFailedError(stepName as string);
+            const reason = await testControl.page.evaluate(() => {
+              const reason = (window as any).testUtils?.failedReason || '';
+              delete (window as any).testUtils.failedReason;
+              return reason;
+            });
+            const errorMessage = `${stepName}${reason ? ` - ${reason}` : ''}`;
+            throw new TestFailedError(errorMessage);
+          }
+        },
+        { box: true }
+      );
+    manualStep.soft = async (stepName: string) =>
+      await test.step(
+        `✋ [MANUAL][SOFT] ${stepName}`,
+        async () => {
+          try {
+            await manualStep(stepName, { isSoft: true });
+          } catch (err) {
+            test.info().annotations.push({
+              type: 'softFail',
+              description: `Soft fail in manual step: ${(err as Error).message}`,
+            });
+            // This will mark the step as failed, but not fail the test
+            await expect.soft(false, `Soft fail in manual step: ${(err as Error).message}`).toBeTruthy();
+            // Optionally log
+            console.warn(`Soft fail in manual step: ${stepName}`, err);
           }
         },
         { box: true }
