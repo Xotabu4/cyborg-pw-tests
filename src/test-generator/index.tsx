@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import EventRecorderApp from './components/EventRecorderApp';
 import { EventRecorderProvider } from './store/EventRecorderStore';
-import '../styles/globals.css';
+import '../styles/globals-snippet.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('cyborg-app') as HTMLElement

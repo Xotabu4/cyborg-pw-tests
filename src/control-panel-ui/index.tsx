@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import Layout from './components/Layout';
 import App from './components/App';
 import { Analytics } from './components/Analytics';
-import '../styles/globals.css';
+import '../styles/globals-control-panel.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('cyborg-app') as HTMLElement
